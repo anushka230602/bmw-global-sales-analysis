@@ -1,4 +1,5 @@
 # BMW Global Sales Analysis
+End-to-end SQL and Power BI project analyzing BMW’s global sales, pricing strategy, and regional demand patterns.
 
 ## Objective
 To analyze BMW’s global sales performance across regions, models, pricing segments, and macroeconomic factors, and derive actionable business insights.
