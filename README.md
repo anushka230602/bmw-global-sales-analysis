@@ -13,12 +13,12 @@ An end-to-end data analytics project analyzing **BMW’s global sales (2018–20
 ### Executive Summary
 
 *High-level KPIs and growth trends*
-![Executive Summary](powerbi/dashboard_screenshots/bm1.png)
+![Executive Summary](powerbi/dashboard_screenshots/bmw1.png)
 
 ###  Product & Regional Analysis
 
 *Revenue drivers across models and global markets*
-![Product & Regional](powerbi/dashboard_screenshots/bm2.png)
+![Product & Regional](powerbi/dashboard_screenshots/bmw2.png)
 
 ###  EV & Premium Insights
 
@@ -119,14 +119,12 @@ bmw-global-sales-analysis/
 │   └── 03_advanced_analysis.sql
 │
 ├── powerbi/
-│   ├── bmw_dashboard.pbix
-│   └── dashboard_screenshots/
-│       ├── page1.png
-│       ├── page2.png
-│       └── page3.png
-│
-└── insights/
-    └── key_insights.md
+    ├── bmw_dashboard.pbix
+    └── dashboard_screenshots/
+        ├── page1.png
+        ├── page2.png
+        └── page3.png
+
 ```
 
 
