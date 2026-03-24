@@ -1,71 +1,153 @@
-# BMW Global Sales Analysis
-End-to-end SQL and Power BI project analyzing BMW’s global sales, pricing strategy, and regional demand patterns.
+#  BMW Global Sales Analysis | SQL + Power BI
 
-## Objective
-To analyze BMW’s global sales performance across regions, models, pricing segments, and macroeconomic factors, and derive actionable business insights.
+##  Project Overview
 
-## Business Problem
-Identify key revenue drivers, evaluate pricing effectiveness, and understand regional demand patterns to support strategic decision-making.
+An end-to-end data analytics project analyzing **BMW’s global sales (2018–2025)** to uncover **revenue drivers, product strategy shifts, and EV adoption trends**.
 
+ Built using **SQL (PostgreSQL) + Power BI**, this project delivers **actionable business insights** through data modeling, advanced queries, and interactive dashboards.
 
-## Dataset
-The dataset contains monthly BMW sales data from 2018 to 2025, including:
+---
 
-- Region and Model  
-- Units Sold and Revenue  
-- Average Price (EUR)  
-- BEV (Electric Vehicle) Share  
-- Premium Segment Share  
-- GDP Growth and Fuel Price Index  
+##  Dashboard Preview
 
+### Executive Summary
 
-## Tools & Technologies
-- **SQL** – Data cleaning, transformation, and advanced analysis  
-- **Power BI** – Dashboard development and data visualization  
+*High-level KPIs and growth trends*
+![Executive Summary](powerbi/dashboard_screenshots/bm1.png)
 
+###  Product & Regional Analysis
 
-## Key Analysis Performed
-- Regional sales and revenue distribution  
-- Best-selling models by region using ranking techniques  
-- Price vs Demand analysis using price bucketing  
-- Premium vs non-premium segment contribution  
-- Impact of macroeconomic factors (GDP growth, fuel prices)  
+*Revenue drivers across models and global markets*
+![Product & Regional](powerbi/dashboard_screenshots/bm2.png)
+
+###  EV & Premium Insights
+
+*Shift toward electrification and premium positioning*
+![EV & Premium](powerbi/dashboard_screenshots/bmw3.png)
 
 
-## Key Insights
-- Revenue distribution is well-balanced globally, with China contributing the highest share (~25.5%), indicating a diversified market presence  
 
-- Demand peaks around the €60,000 price range, suggesting an optimal balance between affordability and premium positioning  
+##  Key Business Insights
 
-- Model preferences vary across regions, highlighting the need for localized product strategies  
+###  Revenue & Growth
 
-- Premium segment vehicles consistently contribute a significant share, reinforcing BMW’s strong luxury brand positioning  
-
-- Sales remain relatively stable despite fluctuations in GDP growth and fuel prices, indicating low price sensitivity and strong brand loyalty  
+* Generated **€1.57T revenue** with **1.96% YoY growth** → indicates **market maturity**
+* Sales increased from **~2.7M → 3.36M units**, while revenue grew faster → **strong pricing power & premium mix**
+ **Implication:** Future growth will likely depend on **expansion of EV segment and innovation**, rather than volume alone
 
 
-## Dashboard
 
-![Dashboard 1](bmw_dashboard_1.png)
+###  Product Strategy
 
-![Dashboard 2](bmw_dashboard_2.png)
-
-
-## Conclusion
-The analysis highlights how pricing strategy, regional preferences, and premium positioning drive BMW’s global sales performance. The findings can support data-driven decisions in pricing optimization, regional targeting, and product strategy.
+* **iX & i4 (EVs)** lead in unit sales → strong shift toward electrification
+* **X7 generates highest revenue** despite lower volume → **high-margin premium positioning**
+* Transition observed from **sedans → SUVs & EVs**
+**Implication:** BMW should **scale EV production while maintaining premium models** to maximize both volume and margins
 
 
-## Project Highlights
-- End-to-end data analysis workflow using SQL and Power BI  
-- Use of advanced SQL techniques such as CTEs, window functions, and aggregations  
-- Business-oriented analysis including pricing strategy and demand behavior  
-- Interactive dashboard with KPIs and filters for dynamic exploration  
+### Regional Performance
+
+* Revenue evenly distributed (~25% each):
+
+  * China: **€401B** | USA: **€391B** | Europe: **€388B**
+* Highly diversified → **reduced regional dependency risk**
+* **USA & China driving faster growth post-2022**
+**Implication:** Growth strategy should **prioritize high-growth markets (USA, China)** while **expanding in underpenetrated regions**
 
 
-## Future Scope
-- Incorporate competitor data for market share benchmarking  
-- Develop predictive models for sales forecasting  
-- Implement a star schema for scalable data modeling  
+
+### EV & Market Trends
+
+* EV share surged from **2.07% → 19.43%** → rapid industry transition
+* Premium segment stable at **~14–15%**
+* **USA & China lead premium demand (~17.5%)**
+* **Rest of World (~6%) = untapped opportunity**
+**Implication:** EV segment will be the **primary driver of future growth**, while emerging markets present **expansion opportunities**
 
 
-## Project Structure
+
+### Data Modeling (Star Schema)
+
+Designed a scalable **star schema** for efficient analytics:
+
+* **Fact Table:** `fact_sales`
+* **Dimensions:** `dim_date`, `dim_region`, `dim_model`
+
+ Enables optimized queries and real-world BI modeling practices.
+
+
+
+## Technical Highlights
+
+* Advanced SQL:
+
+  * CTEs
+  * Aggregations
+  * Window functions
+* Power BI:
+
+  * Multi-page dashboard
+  * KPI cards & time intelligence
+  * Drillthrough functionality
+* DAX:
+
+  * YoY Growth
+  * Averages & KPIs
+  * **Dynamic insight generation (text + metrics)**
+
+
+##  What Makes This Project Stand Out
+
+✔️ Combines **data engineering + analytics + visualization**
+✔️ Implements **star schema (industry-standard modeling)**
+✔️ Includes **dynamic DAX insights (not just static dashboards)**
+✔️ Focuses on **business decision-making, not just reporting**
+
+
+##  Project Structure
+
+```id="finalelite1"
+bmw-global-sales-analysis/
+│
+├── README.md
+├── data/
+│   └── bmw_global_sales.csv
+│
+├── sql/
+│   ├── 01_flat_table_analysis.sql
+│   ├── 02_star_schema.sql
+│   └── 03_advanced_analysis.sql
+│
+├── powerbi/
+│   ├── bmw_dashboard.pbix
+│   └── dashboard_screenshots/
+│       ├── page1.png
+│       ├── page2.png
+│       └── page3.png
+│
+└── insights/
+    └── key_insights.md
+```
+
+
+
+##  How to Run
+
+1. Execute SQL scripts in PostgreSQL
+2. Load dataset into Power BI
+3. Open `.pbix` file
+4. Explore using slicers & drillthrough
+
+
+##  Outcome
+
+This project demonstrates:
+
+* Strong **SQL + data modeling skills**
+* Ability to build **interactive BI dashboards**
+* Capability to generate **strategic business insights**
+
+
+## Final Thought
+
+This project reflects a real-world analytics workflow — transforming raw data into **decision-ready insights**, with a strong focus on **business impact and strategic thinking**.
