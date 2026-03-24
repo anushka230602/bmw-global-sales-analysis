@@ -1,8 +1,9 @@
 
--- Part B: Advanced Star Schema Analytics
+/* Part B: Advanced Star Schema Analytics*/
 
 
--- 1. Top 3 Models per Region per Year 
+/* 1. Top 3 Models per Region per Year */
+
 WITH region_model_year AS (
     SELECT
         r.region_name,
@@ -26,7 +27,7 @@ WHERE rank_in_region <= 3
 ORDER BY region_name, year, total_units DESC;
 
 
--- 2.  YoY Growth per Model
+/* 2.  YoY Growth per Model */
 WITH model_yearly AS (
     SELECT
         m.model_name,
@@ -45,7 +46,7 @@ FROM model_yearly
 ORDER BY model_name, year;
 
 
--- 3.  Cumulative Revenue per Model
+/* 3.  Cumulative Revenue per Model*/
 WITH model_revenue AS (
     SELECT
         m.model_name,
@@ -62,7 +63,7 @@ FROM model_revenue
 ORDER BY model_name, year;
 
 
--- 4.  Price vs Demand Analysis (Price Buckets)
+/* 4.  Price vs Demand Analysis (Price Buckets)*/
 WITH price_buckets AS (
     SELECT
         ROUND(m.avg_price_eur, -3) AS price_bucket,
@@ -82,13 +83,13 @@ FROM price_buckets
 ORDER BY price_bucket;
 
 
--- 5.  EV vs Premium Correlation
+/* 5.  EV vs Premium Correlation*/
 SELECT 
     CORR(f.bev_share, f.premium_share) AS bev_premium_correlation
 FROM fact_sales f;
 
 
--- 6.  Rolling 3-Month Average Sales
+/* 6.  Rolling 3-Month Average Sales*/
 WITH monthly_sales AS (
     SELECT
         d.year,
@@ -104,7 +105,7 @@ FROM monthly_sales
 ORDER BY year, month;
 
 
--- 7. Segment-wise Revenue Contribution
+/* 7. Segment-wise Revenue Contribution*/
 SELECT m.segment,
        SUM(f.revenue_eur) AS segment_revenue,
        ROUND(SUM(f.revenue_eur) * 100.0 / SUM(SUM(f.revenue_eur)) OVER(),2) AS revenue_percent
@@ -114,7 +115,7 @@ GROUP BY m.segment
 ORDER BY segment_revenue DESC;
 
 
---  8. Regional EV Adoption Trends
+/* 8. Regional EV Adoption Trends*/
 SELECT r.region_name,
        AVG(f.bev_share) AS avg_bev_share
 FROM fact_sales f
@@ -123,7 +124,7 @@ GROUP BY r.region_name
 ORDER BY avg_bev_share DESC;
 
 
--- 9. Multi-factor Analysis: GDP & Fuel Price vs Sales
+/* 9. Multi-factor Analysis: GDP & Fuel Price vs Sales*/
 WITH yearly_summary AS (
     SELECT
         d.year,
@@ -142,7 +143,7 @@ FROM yearly_summary
 ORDER BY year;
 
 
--- 10. Price Bucket vs Market Share
+/*10. Price Bucket vs Market Share*/
 WITH price_bucket_units AS (
     SELECT
         ROUND(m.avg_price_eur,-3) AS price_bucket,
