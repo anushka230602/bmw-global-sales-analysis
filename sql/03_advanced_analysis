@@ -1,8 +1,14 @@
+-- ============================================
+-- PART B: ADVANCED STAR SCHEMA ANALYTICS
+-- ============================================
 
-/* Part B: Advanced Star Schema Analytics*/
 
-
-/* 1. Top 3 Models per Region per Year */
+-- ============================================================
+-- 1. Top 3 Models per Region per Year
+-- Objective: Identify best-performing models across regions annually
+-- Why this matters: Helps understand regional demand patterns and product popularity
+-- Expected Insight: EV models may dominate in certain regions, indicating market shift
+-- ============================================================
 
 WITH region_model_year AS (
     SELECT
@@ -27,7 +33,14 @@ WHERE rank_in_region <= 3
 ORDER BY region_name, year, total_units DESC;
 
 
-/* 2.  YoY Growth per Model */
+
+-- ============================================================
+-- 2. YoY Growth per Model
+-- Objective: Analyze year-over-year growth in units sold for each model
+-- Why this matters: Identifies fast-growing or declining products
+-- Expected Insight: EV models likely show higher growth compared to traditional models
+-- ============================================================
+
 WITH model_yearly AS (
     SELECT
         m.model_name,
@@ -46,7 +59,14 @@ FROM model_yearly
 ORDER BY model_name, year;
 
 
-/* 3.  Cumulative Revenue per Model*/
+
+-- ============================================================
+-- 3. Cumulative Revenue per Model
+-- Objective: Track long-term revenue contribution of each model
+-- Why this matters: Identifies consistently high-performing models over time
+-- Expected Insight: Premium models may show stronger cumulative revenue trends
+-- ============================================================
+
 WITH model_revenue AS (
     SELECT
         m.model_name,
@@ -63,7 +83,14 @@ FROM model_revenue
 ORDER BY model_name, year;
 
 
-/* 4.  Price vs Demand Analysis (Price Buckets)*/
+
+-- ============================================================
+-- 4. Price vs Demand Analysis (Price Buckets)
+-- Objective: Understand how pricing impacts demand (units sold)
+-- Why this matters: Helps evaluate price sensitivity across segments
+-- Expected Insight: Mid-range price buckets may show highest demand
+-- ============================================================
+
 WITH price_buckets AS (
     SELECT
         ROUND(m.avg_price_eur, -3) AS price_bucket,
@@ -83,13 +110,27 @@ FROM price_buckets
 ORDER BY price_bucket;
 
 
-/* 5.  EV vs Premium Correlation*/
+
+-- ============================================================
+-- 5. EV vs Premium Correlation
+-- Objective: Measure relationship between EV adoption and premium segment
+-- Why this matters: Determines if EV growth complements or impacts premium sales
+-- Expected Insight: Positive correlation suggests EVs are part of premium strategy
+-- ============================================================
+
 SELECT 
     CORR(f.bev_share, f.premium_share) AS bev_premium_correlation
 FROM fact_sales f;
 
 
-/* 6.  Rolling 3-Month Average Sales*/
+
+-- ============================================================
+-- 6. Rolling 3-Month Average Sales
+-- Objective: Smooth short-term fluctuations in monthly sales
+-- Why this matters: Helps identify underlying trends more clearly
+-- Expected Insight: Post-2020 trend likely shows consistent growth
+-- ============================================================
+
 WITH monthly_sales AS (
     SELECT
         d.year,
@@ -105,7 +146,14 @@ FROM monthly_sales
 ORDER BY year, month;
 
 
-/* 7. Segment-wise Revenue Contribution*/
+
+-- ============================================================
+-- 7. Segment-wise Revenue Contribution
+-- Objective: Analyze revenue distribution across vehicle segments
+-- Why this matters: Identifies most profitable segments
+-- Expected Insight: Premium and SUV segments may dominate revenue share
+-- ============================================================
+
 SELECT m.segment,
        SUM(f.revenue_eur) AS segment_revenue,
        ROUND(SUM(f.revenue_eur) * 100.0 / SUM(SUM(f.revenue_eur)) OVER(),2) AS revenue_percent
@@ -115,7 +163,14 @@ GROUP BY m.segment
 ORDER BY segment_revenue DESC;
 
 
-/* 8. Regional EV Adoption Trends*/
+
+-- ============================================================
+-- 8. Regional EV Adoption Trends
+-- Objective: Compare EV adoption across regions
+-- Why this matters: Identifies leading and lagging markets in electrification
+-- Expected Insight: Developed markets likely show higher EV adoption
+-- ============================================================
+
 SELECT r.region_name,
        AVG(f.bev_share) AS avg_bev_share
 FROM fact_sales f
@@ -124,7 +179,14 @@ GROUP BY r.region_name
 ORDER BY avg_bev_share DESC;
 
 
-/* 9. Multi-factor Analysis: GDP & Fuel Price vs Sales*/
+
+-- ============================================================
+-- 9. Multi-factor Analysis: GDP & Fuel Price vs Sales
+-- Objective: Understand macroeconomic impact on sales performance
+-- Why this matters: Links external factors to business outcomes
+-- Expected Insight: Higher GDP growth may correlate with higher sales
+-- ============================================================
+
 WITH yearly_summary AS (
     SELECT
         d.year,
@@ -143,7 +205,14 @@ FROM yearly_summary
 ORDER BY year;
 
 
-/*10. Price Bucket vs Market Share*/
+
+-- ============================================================
+-- 10. Price Bucket vs Market Share
+-- Objective: Analyze market share distribution across price segments
+-- Why this matters: Helps identify dominant pricing segments in the market
+-- Expected Insight: Mid-range price buckets may hold largest market share
+-- ============================================================
+
 WITH price_bucket_units AS (
     SELECT
         ROUND(m.avg_price_eur,-3) AS price_bucket,
@@ -156,3 +225,20 @@ SELECT *,
        ROUND(units * 100.0 / SUM(units) OVER(),2) AS market_share_percent
 FROM price_bucket_units
 ORDER BY price_bucket;
+
+
+
+-- ============================================
+-- FINAL BUSINESS SUMMARY
+-- ============================================
+
+-- Key Takeaways:
+-- 1. EV models (iX, i4) are driving volume growth → strong shift toward electrification
+-- 2. Premium models (X7) contribute disproportionately to revenue → high-margin strategy
+-- 3. Revenue is evenly distributed across regions → diversified global presence
+-- 4. EV adoption is increasing rapidly → key future growth driver
+-- 5. Pricing analysis suggests strong demand in mid-range segments
+
+-- Conclusion:
+-- Future business growth will depend on scaling EV production,
+-- maintaining premium positioning, and expanding into emerging markets.
