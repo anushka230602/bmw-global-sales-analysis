@@ -1,12 +1,24 @@
+-- ============================================================
+-- BMW GLOBAL SALES - STAR SCHEMA CREATION
+-- Author: Anushka Yadav
+-- ============================================================
 
-/* =========================================
-BMW Global Sales - Star Schema Creation
-Author: Anushka Yadav
-========================================= */
+-- This script transforms raw transactional data into a structured
+-- star schema for efficient analytics and reporting.
 
-/*  Create Dimension Tables */
 
-/* Dim Date */
+-- ============================================================
+-- 1. DIMENSION TABLES CREATION
+-- Objective: Create descriptive tables for filtering and slicing data
+-- Why this matters: Improves query performance and enables BI analysis
+-- ============================================================
+
+
+-- ------------------------------------------------------------
+-- DIM_DATE
+-- Stores time-related attributes for time-series analysis
+-- Enables year, month, and quarter-based reporting
+-- ------------------------------------------------------------
 
 CREATE TABLE dim_date (
     date_id SERIAL PRIMARY KEY,
@@ -24,13 +36,27 @@ CREATE TABLE dim_date (
     UNIQUE(year, month)
 );
 
-/* Dim Region */
+
+
+-- ------------------------------------------------------------
+-- DIM_REGION
+-- Stores geographical information
+-- Enables regional performance analysis
+-- ------------------------------------------------------------
+
 CREATE TABLE dim_region (
     region_id SERIAL PRIMARY KEY,
     region_name VARCHAR(50) UNIQUE
 );
 
-/* Dim Model */
+
+
+-- ------------------------------------------------------------
+-- DIM_MODEL
+-- Stores product-level attributes
+-- Includes segment classification and pricing
+-- ------------------------------------------------------------
+
 CREATE TABLE dim_model (
     model_id SERIAL PRIMARY KEY,
     model_name VARCHAR(50) UNIQUE,
@@ -38,7 +64,14 @@ CREATE TABLE dim_model (
     avg_price_eur NUMERIC
 );
 
-/* Create Fact Table */
+
+
+-- ============================================================
+-- 2. FACT TABLE CREATION
+-- Objective: Store measurable business metrics
+-- Why this matters: Central table for all analytics
+-- ============================================================
+
 CREATE TABLE fact_sales (
     sales_id SERIAL PRIMARY KEY,
     date_id INT NOT NULL REFERENCES dim_date(date_id),
@@ -52,40 +85,81 @@ CREATE TABLE fact_sales (
     gdp_growth NUMERIC
 );
 
-/* Populate Dimension Tables */
 
-/* Dim Date */
+
+-- ============================================================
+-- 3. POPULATE DIMENSION TABLES
+-- Objective: Extract unique attributes from raw dataset
+-- Why this matters: Avoids redundancy and ensures consistency
+-- ============================================================
+
+
+-- ------------------------------------------------------------
+-- Populate DIM_DATE
+-- Extract distinct year-month combinations
+-- ------------------------------------------------------------
+
 INSERT INTO dim_date (year, month)
 SELECT DISTINCT 
     year, 
-    month::INT   -- cast month from VARCHAR to INT
+    month::INT
 FROM bmw_global_sales;
 
-/* Dim Region */
+
+
+-- ------------------------------------------------------------
+-- Populate DIM_REGION
+-- Extract unique regions
+-- ------------------------------------------------------------
+
 INSERT INTO dim_region (region_name)
 SELECT DISTINCT region
 FROM bmw_global_sales;
 
-/* Dim Model */
+
+
+-- ------------------------------------------------------------
+-- Populate DIM_MODEL
+-- Extract unique models and assign average price
+-- ------------------------------------------------------------
+
 INSERT INTO dim_model (model_name, avg_price_eur)
 SELECT DISTINCT model, AVG(avg_price_eur)
 FROM bmw_global_sales
 GROUP BY model;
 
-/* segment*/
+
+
+-- ============================================================
+-- 4. SEGMENT CLASSIFICATION
+-- Objective: Categorize models into business segments
+-- Why this matters: Enables segment-level analysis in BI tools
+-- ============================================================
+
+
+-- SUV Segment
 UPDATE dim_model
 SET segment = 'SUV'
 WHERE model_name IN ('X5', 'X6', 'X7');
 
+-- Sedan Segment
 UPDATE dim_model
 SET segment = 'Sedan'
 WHERE model_name IN ('3 Series', '5 Series', '7 Series');
 
+-- EV Segment
 UPDATE dim_model
 SET segment = 'EV'
 WHERE model_name IN ('i3', 'iX', 'i4');
 
-/*  Populate Fact Table */
+
+
+-- ============================================================
+-- 5. POPULATE FACT TABLE
+-- Objective: Link dimensions with transactional data
+-- Why this matters: Enables relational analytics via joins
+-- ============================================================
+
 INSERT INTO fact_sales (
     date_id,
     region_id,
@@ -108,10 +182,32 @@ SELECT
     b.fuel_price_index,
     b.gdp_growth
 FROM bmw_global_sales b
+
+-- Join with Date Dimension
 JOIN dim_date d 
-    ON b.year::INT = d.year       -- cast year to INT
-    AND b.month::INT = d.month    -- cast month to INT
+    ON b.year::INT = d.year
+    AND b.month::INT = d.month
+
+-- Join with Region Dimension
 JOIN dim_region r 
     ON b.region = r.region_name
+
+-- Join with Model Dimension
 JOIN dim_model m 
     ON b.model = m.model_name;
+
+
+
+-- ============================================================
+-- FINAL SUMMARY
+-- ============================================================
+
+-- Key Achievements:
+-- 1. Converted raw flat dataset into structured star schema
+-- 2. Separated data into fact and dimension tables
+-- 3. Enabled efficient analytical queries and BI reporting
+-- 4. Added business logic via segment classification
+
+-- Outcome:
+-- This schema supports scalable analytics, improves query performance,
+-- and aligns with industry-standard data warehouse design practices.
