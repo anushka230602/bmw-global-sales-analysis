@@ -93,16 +93,7 @@ Designed a scalable **star schema** for efficient analytics:
 
   * YoY Growth
   * Averages & KPIs
-  * **Dynamic insight generation (text + metrics)**
-
-
-##  What Makes This Project Stand Out
-
-✔️ Combines **data engineering + analytics + visualization**
-✔️ Implements **star schema (industry-standard modeling)**
-✔️ Includes **dynamic DAX insights (not just static dashboards)**
-✔️ Focuses on **business decision-making, not just reporting**
-
+  * **Dynamic insight generation (text + metrics)*
 
 ##  Project Structure
 
